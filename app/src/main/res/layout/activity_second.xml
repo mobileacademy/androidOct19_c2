@@ -40,6 +40,18 @@
 
     </RadioGroup>
 
+    <Button
+        android:id="@+id/startServiceBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="START Service"/>
+
+    <Button
+        android:id="@+id/startIntentServiceBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start IntentService"/>
+
     <ListView
         android:id="@+id/myListView"
         android:layout_width="match_parent"
