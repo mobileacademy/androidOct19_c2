@@ -1,4 +1,4 @@
-package com.e.navdrawerapp;
+package com.e.navdrawerapp.services;
 
 import android.app.IntentService;
 import android.content.Intent;

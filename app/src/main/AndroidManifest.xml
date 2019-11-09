@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.e.navdrawerapp">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".DrawerAppApplication"
         android:allowBackup="true"
@@ -12,8 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".BeersActivity"></activity>
         <activity android:name=".SecondActivity" />
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -24,20 +26,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <receiver
             android:name=".LocaleChangedReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.LOCALE_CHANGED"/>
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
             </intent-filter>
         </receiver>
 
         <service
-            android:name=".CounterIntentService"
+            android:name=".services.GetBeersIntentService"
             android:exported="false" />
         <service
-            android:name=".CounterService"
+            android:name=".services.CounterIntentService"
+            android:exported="false" />
+        <service
+            android:name=".services.CounterService"
             android:enabled="true"
             android:exported="false" />
     </application>

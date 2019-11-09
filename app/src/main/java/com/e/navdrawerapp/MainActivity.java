@@ -46,9 +46,15 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Open Second Activity", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
-                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                intent.putExtra("extra_no", 101);
+                // open SecondActivty
+//                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+//                intent.putExtra("extra_no", 101);
+//                startActivity(intent);
+
+                // open BeersActivity
+                Intent intent = new Intent(MainActivity.this, BeersActivity.class);
                 startActivity(intent);
+
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
