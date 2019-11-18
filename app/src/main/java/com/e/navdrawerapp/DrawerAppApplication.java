@@ -2,6 +2,8 @@ package com.e.navdrawerapp;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,8 @@ public class DrawerAppApplication extends Application {
         super.onCreate();
 
         populateList();
+
+        Stetho.initializeWithDefaults(this);
 
     }
 

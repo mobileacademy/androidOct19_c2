@@ -1,6 +1,8 @@
 package com.e.navdrawerapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.content.BroadcastReceiver;
@@ -12,6 +14,9 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.e.navdrawerapp.database.BeerEntity;
+import com.e.navdrawerapp.database.BeerViewModel;
+import com.e.navdrawerapp.database.ViewModelFactory;
 import com.e.navdrawerapp.network.Beer;
 import com.e.navdrawerapp.network.BeerApiOkHttp;
 import com.e.navdrawerapp.services.CounterIntentService;
@@ -84,6 +89,32 @@ public class BeersActivity extends AppCompatActivity {
 
         beersAdapter = new BeersAdapter(beerList);
         beersListView.setAdapter(beersAdapter);
+
+        BeerViewModel viewModel =
+                ViewModelProviders.of(this, new ViewModelFactory(getApplication())).get(BeerViewModel.class);
+
+
+        viewModel.getBeerList().observe(this, new Observer<List<BeerEntity>>() {
+            @Override
+            public void onChanged(List<BeerEntity> beerEntities) {
+                Log.d(TAG, "**** on Change ****");
+
+                // here is Ui Thread
+                if (beerEntities != null) {
+                    List<Beer> result = new ArrayList<>();
+
+                    Log.d(TAG, "new list size is " + beerEntities.size());
+
+                    for (int i=0; i< beerEntities.size();i++) {
+                        BeerEntity entity = beerEntities.get(i);
+                        Beer beer = new Beer(entity.id, entity.name, entity.desc, entity.imgUrl);
+                        result.add(beer);
+                    }
+
+                    beersAdapter.updateList(result);
+                }
+            }
+        });
     }
 
     @Override
@@ -92,30 +123,30 @@ public class BeersActivity extends AppCompatActivity {
         Log.d(TAG, "onResume -> start intent service to GET beer list");
 
         // FOR GET LIST SYNC (example 1)
-        //startService(new Intent(this, GetBeersIntentService.class));
+        startService(new Intent(this, GetBeersIntentService.class));
 
-        // GET ASYNC
-        BeerApiOkHttp.retrieveBeersAsync("https://api.punkapi.com/v2/beers", new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.e(TAG, "onFailure");
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                // HTTP CODE 200
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "send broadcast message");
-                    Intent broadcastIntent = new Intent("GET_CALL_DONE_REFRESH_UI");
-                    broadcastIntent.putExtra("result", response.body().string());
-                    LocalBroadcastManager.getInstance(BeersActivity.this).sendBroadcast(broadcastIntent);
-
-                } else {
-                    // HTTP code 4xx 5xx
-                    Toast.makeText(BeersActivity.this, "Try again later!", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        // GET ASYNC (example 2)
+//        BeerApiOkHttp.retrieveBeersAsync("https://api.punkapi.com/v2/beers", new Callback() {
+//            @Override
+//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//                Log.e(TAG, "onFailure");
+//            }
+//
+//            @Override
+//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//                // HTTP CODE 200
+//                if (response.isSuccessful()) {
+//                    Log.d(TAG, "send broadcast message");
+//                    Intent broadcastIntent = new Intent("GET_CALL_DONE_REFRESH_UI");
+//                    broadcastIntent.putExtra("result", response.body().string());
+//                    LocalBroadcastManager.getInstance(BeersActivity.this).sendBroadcast(broadcastIntent);
+//
+//                } else {
+//                    // HTTP code 4xx 5xx
+//                    Toast.makeText(BeersActivity.this, "Try again later!", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
     }
 
     @Override

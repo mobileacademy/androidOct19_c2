@@ -30,6 +30,14 @@ public class Beer {
         imageUrl = url;
     }
 
+
+    public Beer(Integer id, String name, String desc, String url) {
+        this.id = id;
+        this.name = name;
+        description = desc;
+        imageUrl = url;
+    }
+
     public Integer getId() {
         return id;
     }
